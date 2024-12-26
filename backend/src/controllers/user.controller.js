@@ -1,5 +1,6 @@
 const User = require("../models/user.model.js");
 const { generateToken } = require("../util/user.util.js");
+const cloudinary = require("../util/cloudinary.util.js");
 const bcrypt = require("bcrypt");
 
 const signup = async (req, res) => {
@@ -26,11 +27,15 @@ const signup = async (req, res) => {
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+    let profilePicUrl;
+    if (profilePic) {
+      profilePicUrl = await cloudinary.uploader.upload(profilePic).secure_url;
+    }
     const user = await new User({
       username,
       email,
       password: hashedPassword,
-      ...(profilePic && { profilePic }),
+      ...(profilePic && { profilePic: profilePicUrl }),
     }).save();
     generateToken(user._id, res);
     delete user.password;
