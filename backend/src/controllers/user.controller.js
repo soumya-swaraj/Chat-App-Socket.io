@@ -130,4 +130,28 @@ const getUser = (req, res) => {
   });
 };
 
-module.exports = { signup, login, logout, getUser };
+const checkUsername = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(200).json({
+        status: "success",
+        message: "Username is available",
+      });
+    } else {
+      return res.status(200).json({
+        status: "success",
+        message: "Username is not available",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+};
+
+module.exports = { signup, login, logout, getUser, checkUsername };
