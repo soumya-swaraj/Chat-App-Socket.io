@@ -5,7 +5,7 @@ import styles from "./Signup.module.css";
 import { useEffect, useState } from "react";
 import pencil from "../../assets/pencil.png";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Signup() {
   const [username, setUsername] = useState("");
@@ -146,86 +146,97 @@ function Signup() {
       </div>
       <div className={styles.rightContainer}>
         {!showProfilePicSetSection ? (
-          <form onSubmit={createAccountHandler}>
-            <div>
-              <h1>Welcome!</h1>
-              <h3>Create your account</h3>
+          <>
+            {" "}
+            <form onSubmit={createAccountHandler}>
+              <div>
+                <h1>Welcome!</h1>
+                <h3>Create your account</h3>
+              </div>
+              <div className={styles.inputContainer}>
+                <label>Email</label>
+                <input
+                  type="text"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailValidationMsg("");
+                  }}
+                />
+                {emailValidationMsg && (
+                  <p className={styles.validation}>{emailValidationMsg}</p>
+                )}
+              </div>
+              <div className={styles.inputContainer}>
+                <label>Username</label>
+                <input
+                  type="text"
+                  placeholder="Username"
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    setUsernameValidationMsg("");
+                  }}
+                />
+                {usernameValidationMsg && (
+                  <p className={styles.validation}>{usernameValidationMsg}</p>
+                )}
+              </div>
+              <div
+                className={`${styles.inputContainer} ${styles.passwordContainer}`}
+              >
+                <label>Password</label>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordValidationMsg("");
+                  }}
+                />
+                {passwordValidationMsg && (
+                  <p className={styles.validation}>{passwordValidationMsg}</p>
+                )}
+                <img
+                  src={showPassword ? showPasswordImg : hidePasswordImg}
+                  onClick={togglePasswordHandler}
+                />
+              </div>
+              <div
+                className={`${styles.inputContainer} ${styles.passwordContainer}`}
+              >
+                <label>Confirm password</label>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Confirm password"
+                  value={confPassword}
+                  onChange={(e) => {
+                    setConfPassword(e.target.value);
+                    if (password === e.target.value) {
+                      setConfPasswordValidationMsg("");
+                    }
+                  }}
+                />
+                {confPasswordValidationMsg && (
+                  <p className={styles.validation}>
+                    {confPasswordValidationMsg}
+                  </p>
+                )}
+              </div>
+              <div className={styles.btnContainer}>
+                <button disabled={isLoading} type="submit">
+                  {isLoading ? "Loading..." : "Next"}
+                </button>
+              </div>
+            </form>
+            <div style={{ marginTop: "20px" }}>
+              <span>Already have an account?&nbsp;</span>
+              <Link style={{ color: "rgb(150, 113, 229)" }} to={"/login"}>
+                Login
+              </Link>
             </div>
-            <div className={styles.inputContainer}>
-              <label>Email</label>
-              <input
-                type="text"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setEmailValidationMsg("");
-                }}
-              />
-              {emailValidationMsg && (
-                <p className={styles.validation}>{emailValidationMsg}</p>
-              )}
-            </div>
-            <div className={styles.inputContainer}>
-              <label>Username</label>
-              <input
-                type="text"
-                placeholder="Username"
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  setUsernameValidationMsg("");
-                }}
-              />
-              {usernameValidationMsg && (
-                <p className={styles.validation}>{usernameValidationMsg}</p>
-              )}
-            </div>
-            <div
-              className={`${styles.inputContainer} ${styles.passwordContainer}`}
-            >
-              <label>Password</label>
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordValidationMsg("");
-                }}
-              />
-              {passwordValidationMsg && (
-                <p className={styles.validation}>{passwordValidationMsg}</p>
-              )}
-              <img
-                src={showPassword ? showPasswordImg : hidePasswordImg}
-                onClick={togglePasswordHandler}
-              />
-            </div>
-            <div
-              className={`${styles.inputContainer} ${styles.passwordContainer}`}
-            >
-              <label>Confirm password</label>
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Confirm password"
-                value={confPassword}
-                onChange={(e) => {
-                  setConfPassword(e.target.value);
-                  if (password === e.target.value) {
-                    setConfPasswordValidationMsg("");
-                  }
-                }}
-              />
-              {confPasswordValidationMsg && (
-                <p className={styles.validation}>{confPasswordValidationMsg}</p>
-              )}
-            </div>
-            <div className={styles.btnContainer}>
-              <button disabled={isLoading} type="submit">
-                {isLoading ? "Loading..." : "Next"}
-              </button>
-            </div>
-          </form>
+          </>
         ) : (
           <div style={{ position: "relative" }}>
             <div className={styles.photoContainer}>
