@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import pencil from "../../assets/pencil.png";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { HashLoader } from "react-spinners";
 
 function Signup() {
   const [username, setUsername] = useState("");
@@ -226,7 +227,11 @@ function Signup() {
               </div>
               <div className={styles.btnContainer}>
                 <button disabled={isLoading} type="submit">
-                  {isLoading ? "Loading..." : "Next"}
+                  {isLoading ? (
+                    <HashLoader color="#ffffff" loading size={20} />
+                  ) : (
+                    "Next"
+                  )}
                 </button>
               </div>
             </form>
@@ -259,7 +264,13 @@ function Signup() {
             />
             <div className={styles.btnContainer}>
               <button disabled={isLoading} onClick={addProfilePic}>
-                {isLoading ? "Loading..." : "Finish"}
+                {isLoading ? (
+                  <HashLoader color="#ffffff" loading size={20} />
+                ) : profilePic ? (
+                  "Finish"
+                ) : (
+                  "Skip"
+                )}
               </button>
             </div>
           </div>
