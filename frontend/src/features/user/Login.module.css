@@ -112,6 +112,7 @@
 
 .btnContainer > button {
   width: 100px;
+  height: 38px;
   padding: 10px 20px;
   border-radius: 10px;
   outline: none;

@@ -5,11 +5,12 @@ import styles from "./Login.module.css";
 import logoWhite from "../../assets/logo-white.png";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { HashLoader } from "react-spinners";
 
 function Login() {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -77,7 +78,11 @@ function Login() {
           </div>
           <div className={styles.btnContainer}>
             <button disabled={isLoading} type="submit">
-              {isLoading ? "Loading..." : "Login"}
+              {isLoading ? (
+                <HashLoader color="#ffffff" loading size={20} />
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
         </form>
