@@ -154,4 +154,46 @@ const checkUsername = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, logout, getUser, checkUsername };
+const updateProfilePic = async (req, res) => {
+  const { _id } = req.user;
+  const { profilePic } = req.body;
+  if (!profilePic) {
+    return res
+      .status(400)
+      .json({ status: "fail", message: "Provide profile picture" });
+  }
+  try {
+    const uploadedImg = await cloudinary.uploader.upload(profilePic);
+    const profilePicUrl = uploadedImg.secure_url;
+    console.log(profilePicUrl);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id },
+      { profilePic: profilePicUrl },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "User not found" });
+    }
+    res.status(200).json({
+      status: "success",
+      data: { user: updatedUser },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+};
+
+module.exports = {
+  signup,
+  login,
+  logout,
+  getUser,
+  checkUsername,
+  updateProfilePic,
+};

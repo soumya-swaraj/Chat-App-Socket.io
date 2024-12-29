@@ -3,23 +3,27 @@ import hidePasswordImg from "../../assets/hide-password.png";
 import showPasswordImg from "../../assets/show-password.png";
 import styles from "./Signup.module.css";
 import { useEffect, useState } from "react";
+import pencil from "../../assets/pencil.png";
+import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [profilePic, setProfilePic] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
-
   const [emailValidationMsg, setEmailValidationMsg] = useState("");
   const [usernameValidationMsg, setUsernameValidationMsg] = useState("");
   const [passwordValidationMsg, setPasswordValidationMsg] = useState("");
   const [confPasswordValidationMsg, setConfPasswordValidationMsg] =
     useState("");
-
   const [showProfilePicSetSection, setShowProfilePicSetSection] =
     useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -43,10 +47,22 @@ function Signup() {
     if (username) checkUsername();
   }, [username]);
 
+  function photoChangeHandler(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        const base64String = reader.result;
+        setProfilePic(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   function togglePasswordHandler() {
     setShowPassword((prev) => !prev);
   }
-  function createAccountHandler(e) {
+  async function createAccountHandler(e) {
     e.preventDefault();
     if (!email) setEmailValidationMsg("Provide email");
     if (!username) setUsernameValidationMsg("Provide username");
@@ -56,22 +72,68 @@ function Signup() {
     if (!email || !username || !password || password !== confPassword) {
       return;
     }
-    setShowProfilePicSetSection(true);
-    // fetch("http://localhost:4000/api/v1/user/", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     username,
-    //     email,
-    //     password,
-    //   }),
-    // });
+    try {
+      setIsLoading(true);
+      const res = await fetch("http://localhost:4000/api/v1/user/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          credentials: true,
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (data.status === "fail") {
+        toast(data.message);
+      }
+      if (data.status === "success") {
+        setShowProfilePicSetSection(true);
+      }
+    } catch (error) {
+      console.log("createAccountHandler - Signup.jsx", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function addProfilePic() {
+    if (!profilePic) {
+      navigate("/");
+    }
+    try {
+      setIsLoading(true);
+      const res = await fetch(
+        "http://localhost:4000/api/v1/user/update/profilePic",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ profilePic }),
+          credentials: "include",
+        }
+      );
+      const data = await res.json();
+      if (data.status === "success") {
+        navigate("/");
+      } else if (data.message === "fail") {
+        toast("try again");
+      }
+    } catch (error) {
+      console.log("addProfilePic - Signup.jsx", error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className={styles.mainContainer}>
+      <Toaster />
       <div className={styles.leftContainer}>
         <div className={styles.logoContainer}>
           <img src={logoWhite} alt="logo" />
@@ -159,17 +221,35 @@ function Signup() {
               )}
             </div>
             <div className={styles.btnContainer}>
-              <button type="submit">Create Account</button>
+              <button disabled={isLoading} type="submit">
+                {isLoading ? "Loading..." : "Next"}
+              </button>
             </div>
           </form>
         ) : (
-          <div>
+          <div style={{ position: "relative" }}>
+            <div className={styles.photoContainer}>
+              <img
+                src={
+                  profilePic ||
+                  "https://res.cloudinary.com/dli5cdsx2/image/upload/v1735420627/m2roxyccjigixm3fraqr.png"
+                }
+              />
+            </div>
             <label htmlFor="photoInput">
-              <div className={styles.photoContainer}></div>
+              <img src={pencil} />
             </label>
-            <input id="photoInput" type="file" style={{ display: "none" }} />
+            <input
+              // value={profilePic}
+              onChange={photoChangeHandler}
+              id="photoInput"
+              type="file"
+              style={{ display: "none" }}
+            />
             <div className={styles.btnContainer}>
-              <button>Create Account</button>
+              <button disabled={isLoading} onClick={addProfilePic}>
+                {isLoading ? "Loading..." : "Finish"}
+              </button>
             </div>
           </div>
         )}

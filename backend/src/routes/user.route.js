@@ -6,6 +6,7 @@ const {
   logout,
   getUser,
   checkUsername,
+  updateProfilePic,
 } = require("../controllers/user.controller.js");
 const { authUser } = require("../middlewares/user.middleware.js");
 
@@ -16,5 +17,6 @@ router.get("/", authUser, getUser);
 router.post("/login", login);
 router.get("/logout", logout);
 router.get("/check/:username", checkUsername);
+router.patch("/update/profilePic", authUser, updateProfilePic);
 
 module.exports = router;
