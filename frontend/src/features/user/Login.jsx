@@ -6,6 +6,8 @@ import logoWhite from "../../assets/logo-white.png";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { HashLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { addUserFromCookie } from "./userSlice";
 
 function Login() {
   const [identifier, setIdentifier] = useState("");
@@ -13,6 +15,7 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   async function loginHandler(e) {
     e.preventDefault();
@@ -30,6 +33,7 @@ function Login() {
       if (data.status === "fail") {
         toast(data.message);
       } else if (data.status === "success") {
+        dispatch(addUserFromCookie());
         navigate("/");
       }
     } catch (error) {

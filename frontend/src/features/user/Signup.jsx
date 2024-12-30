@@ -7,6 +7,8 @@ import pencil from "../../assets/pencil.png";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { HashLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { addUserFromCookie } from "./userSlice";
 
 function Signup() {
   const [username, setUsername] = useState("");
@@ -25,6 +27,7 @@ function Signup() {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -93,6 +96,7 @@ function Signup() {
         toast(data.message);
       }
       if (data.status === "success") {
+        dispatch(addUserFromCookie());
         setShowProfilePicSetSection(true);
       }
     } catch (error) {
