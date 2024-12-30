@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSelector } from "reselect";
 
 const initialState = {
   user: null,
@@ -15,10 +16,10 @@ const addUserFromCookie = createAsyncThunk(
         credentials: "include",
       });
       if (!res.ok) {
-        const data = res.json();
+        const data = await res.json();
         return rejectWithValue(data.message);
       }
-      const data = res.json();
+      const data = await res.json();
       return data.data.user;
     } catch (error) {
       return rejectWithValue(error);
@@ -47,5 +48,14 @@ const userSlice = createSlice({
   },
 });
 
-export { addUserFromCookie };
+const selectAuth = (state) => state.user;
+
+const selectUser = createSelector([selectAuth], (user) => user.user);
+const selectIsAuthenticated = createSelector(
+  [selectAuth],
+  (user) => user.isAuthenticated
+);
+const selectLoading = createSelector([selectAuth], (user) => user.loading);
+
+export { addUserFromCookie, selectUser, selectIsAuthenticated, selectLoading };
 export default userSlice.reducer;
