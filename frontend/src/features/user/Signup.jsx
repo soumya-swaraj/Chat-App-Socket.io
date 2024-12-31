@@ -12,11 +12,13 @@ import { addUserFromCookie } from "./userSlice";
 
 function Signup() {
   const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [nameValidationMsg, setNameValidationMsg] = useState("");
   const [emailValidationMsg, setEmailValidationMsg] = useState("");
   const [usernameValidationMsg, setUsernameValidationMsg] = useState("");
   const [passwordValidationMsg, setPasswordValidationMsg] = useState("");
@@ -68,12 +70,19 @@ function Signup() {
   }
   async function createAccountHandler(e) {
     e.preventDefault();
+    if (!name) setNameValidationMsg("Provide name");
     if (!email) setEmailValidationMsg("Provide email");
     if (!username) setUsernameValidationMsg("Provide username");
     if (!password) setPasswordValidationMsg("Provide password");
     if (password !== confPassword)
       setConfPasswordValidationMsg("Password does not match");
-    if (!email || !username || !password || password !== confPassword) {
+    if (
+      !name ||
+      !email ||
+      !username ||
+      !password ||
+      password !== confPassword
+    ) {
       return;
     }
     try {
@@ -85,6 +94,7 @@ function Signup() {
           credentials: true,
         },
         body: JSON.stringify({
+          name,
           username,
           email,
           password,
@@ -96,7 +106,6 @@ function Signup() {
         toast(data.message);
       }
       if (data.status === "success") {
-        dispatch(addUserFromCookie());
         setShowProfilePicSetSection(true);
       }
     } catch (error) {
@@ -108,6 +117,7 @@ function Signup() {
 
   async function addProfilePic() {
     if (!profilePic) {
+      dispatch(addUserFromCookie());
       navigate("/");
     }
     try {
@@ -157,6 +167,21 @@ function Signup() {
               <div>
                 <h1>Welcome!</h1>
                 <h3>Create your account</h3>
+              </div>
+              <div className={styles.inputContainer}>
+                <label>Fullname</label>
+                <input
+                  type="text"
+                  placeholder="Fullname"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    setNameValidationMsg("");
+                  }}
+                />
+                {nameValidationMsg && (
+                  <p className={styles.validation}>{nameValidationMsg}</p>
+                )}
               </div>
               <div className={styles.inputContainer}>
                 <label>Email</label>

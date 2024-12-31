@@ -1,0 +1,47 @@
+.chatPaneMainContainer {
+  width: 100%;
+  height: 99.6%;
+  background-color: rgb(167, 149, 206);
+  overflow-y: auto;
+  border-top: 3px solid white;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding: 20px;
+  transition: all 300ms;
+}
+
+.chatPaneClose {
+  width: 80px;
+}
+
+.chatPaneMainContainer > .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatPaneMainContainer > .header > input {
+  height: 30px;
+  width: 250px;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  padding: 0 10px;
+  background-color: rgb(223, 219, 232);
+  transition: all 200ms;
+}
+
+.chatPaneMainContainer > .header > input:focus {
+  transform: scale(1.03);
+}
+
+.chatPaneMainContainer > .header > button {
+  background-color: transparent;
+  outline: none;
+  border: none;
+}
+
+.chatPaneMainContainer > .header > button > img {
+  height: 30px;
+  background-color: transparent;
+}

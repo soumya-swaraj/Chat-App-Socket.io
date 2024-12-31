@@ -18,3 +18,19 @@ nav > p {
   font-size: 30px;
   color: white;
 }
+
+nav > input {
+  width: 300px;
+  height: 35px;
+  outline: none;
+  border-radius: 999px;
+  border: none;
+  padding: 0px 15px;
+  background: rgb(196, 176, 240);
+  transition: all 200ms;
+}
+
+nav > input:focus {
+  width: 310px;
+  height: 40px;
+}

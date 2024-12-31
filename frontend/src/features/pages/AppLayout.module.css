@@ -1,0 +1,17 @@
+.topContainer {
+  height: 100dvh;
+  width: 100dvw;
+}
+
+.mainContainer {
+  width: 100dvw;
+  height: calc(100dvh - 60px);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.chatPaneContainer {
+  width: 350px;
+  height: 100%;
+}
