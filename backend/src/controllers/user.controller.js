@@ -4,11 +4,11 @@ const cloudinary = require("../util/cloudinary.util.js");
 const bcrypt = require("bcrypt");
 
 const signup = async (req, res) => {
-  const { username, email, password, profilePic } = req.body;
-  if (!username || !email || !password) {
+  const { username, email, password, profilePic, name } = req.body;
+  if (!username || !email || !password || !name) {
     return res.status(400).json({
       status: "fail",
-      message: "Username, email, password are mandatory",
+      message: "Username, email, password and name are mandatory",
     });
   }
   try {
@@ -32,6 +32,7 @@ const signup = async (req, res) => {
       profilePicUrl = await cloudinary.uploader.upload(profilePic).secure_url;
     }
     const user = await new User({
+      name,
       username,
       email,
       password: hashedPassword,
@@ -130,6 +131,38 @@ const getUser = (req, res) => {
   });
 };
 
+const getAllUser = async (req, res) => {
+  const { regex } = req.params;
+  try {
+    const users = await User.find({
+      username: { $regex: regex, $options: "i" },
+    });
+    return res.status(200).json({
+      status: "success",
+      data: {
+        users,
+      },
+    });
+  } catch (error) {
+    return res.status(200).json({
+      status: "fail",
+      message: "Internal server error",
+    });
+  }
+  // const user = req.user;
+  // const filteredUser = {
+  //   username: user.username,
+  //   _id: user._id,
+  //   email: user.email,
+  //   profilePic: user.profilePic,
+  //   createdAt: user.createdAt,
+  // };
+  // res.status(200).json({
+  //   status: "success",
+  //   data: { user: filteredUser },
+  // });
+};
+
 const checkUsername = async (req, res) => {
   try {
     const { username } = req.params;
@@ -165,7 +198,6 @@ const updateProfilePic = async (req, res) => {
   try {
     const uploadedImg = await cloudinary.uploader.upload(profilePic);
     const profilePicUrl = uploadedImg.secure_url;
-    console.log(profilePicUrl);
 
     const updatedUser = await User.findByIdAndUpdate(
       { _id },
@@ -196,4 +228,5 @@ module.exports = {
   getUser,
   checkUsername,
   updateProfilePic,
+  getAllUser,
 };
