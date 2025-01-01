@@ -1,5 +1,5 @@
 .chatPaneMainContainer {
-  width: 100%;
+  width: 350px;
   height: 99.6%;
   background-color: rgb(167, 149, 206);
   overflow-y: auto;
@@ -11,7 +11,7 @@
 }
 
 .chatPaneClose {
-  width: 80px;
+  width: 100px;
 }
 
 .chatPaneMainContainer > .header {
@@ -44,4 +44,8 @@
 .chatPaneMainContainer > .header > button > img {
   height: 30px;
   background-color: transparent;
+}
+
+.userContainer {
+  margin-top: 20px;
 }

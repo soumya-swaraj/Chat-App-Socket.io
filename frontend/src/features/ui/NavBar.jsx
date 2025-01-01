@@ -14,9 +14,12 @@ function NavBar() {
     async function fetchUsers() {
       try {
         setIsUserLoading(true);
-        const res = await fetch(`http://localhost:4000/api/v1/user/${regex}`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `http://localhost:4000/api/v1/user/all/${regex}`,
+          {
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         setUsers(data.data.users);
       } catch (error) {
@@ -32,15 +35,23 @@ function NavBar() {
   return (
     <nav>
       <p>Chatify</p>
-      <input
-        value={regex}
-        onChange={(e) => {
-          setRegex(e.target.value);
-        }}
-        type="text"
-      />
+      <div>
+        <input
+          value={regex}
+          onChange={(e) => {
+            setRegex(e.target.value);
+          }}
+          type="text"
+        />
+        {regex && (
+          <UserList
+            setRegex={setRegex}
+            users={users}
+            isUserLoading={isUserLoading}
+          />
+        )}
+      </div>
       <img src={user.profilePic} alt="" />
-      {regex && <UserList users={users} isUserLoading={isUserLoading} />}
     </nav>
   );
 }

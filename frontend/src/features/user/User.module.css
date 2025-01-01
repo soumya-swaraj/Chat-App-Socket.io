@@ -5,12 +5,8 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  padding: 0 20px;
+  padding: 0 10px;
   transition: all 200ms;
-}
-
-.userCardContainer:hover {
-  background-color: rgb(161, 131, 226);
 }
 
 .userCardContainer > img {
@@ -19,4 +15,17 @@
   width: 40px;
   border-radius: 9999px;
   border: 2px solid white;
+}
+
+.userCardContainer:hover {
+  transform: scale(1.02);
+}
+
+.username {
+  font-size: 15px;
+  color: gray;
+}
+
+.name {
+  font-size: 17px;
 }

@@ -7,11 +7,11 @@
   width: 100dvw;
   height: calc(100dvh - 60px);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: nowrap;
 }
 
 .chatPaneContainer {
-  width: 350px;
+  max-width: 350px;
   height: 100%;
 }

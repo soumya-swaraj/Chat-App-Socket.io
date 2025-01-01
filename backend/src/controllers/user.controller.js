@@ -221,6 +221,31 @@ const updateProfilePic = async (req, res) => {
   }
 };
 
+const getUserByID = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id);
+    if (!user)
+      return res.status(400).json({
+        status: "fail",
+        message: "Invalid user id",
+      });
+
+    if (user)
+      return res.status(200).json({
+        status: "success",
+        data: { user },
+      });
+  } catch (error) {
+    console.log("getUserByID - user.controller.js ", error);
+    return res.status(200).json({
+      status: "error",
+      message: "Internal server error.",
+    });
+  }
+};
+
 module.exports = {
   signup,
   login,
@@ -229,4 +254,5 @@ module.exports = {
   checkUsername,
   updateProfilePic,
   getAllUser,
+  getUserByID,
 };
