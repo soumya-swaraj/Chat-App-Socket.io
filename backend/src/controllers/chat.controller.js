@@ -3,7 +3,7 @@ const { Chat } = require("../models/chat.model.js");
 const createNewChat = async (req, res) => {
   try {
     const { chatName, admins, members, isGroupChat } = req.body;
-    if (!members || !isGroupChat) {
+    if (!members || typeof isGroupChat === "undefined") {
       return res.status(400).json({
         status: "fail",
         message: "members, isGroupChat are mandatory",
@@ -45,4 +45,30 @@ const getChats = async (req, res) => {
   }
 };
 
-module.exports = { createNewChat, getChats };
+const checkPvtChatByMembers = async (req, res) => {
+  try {
+    const members = req.query.members.split(",");
+    if (members.length !== 2) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Input is not valid",
+      });
+    }
+    const chat = await Chat.findOne({
+      isGroupChat: false,
+      members: { $size: 2, $all: members },
+    });
+    return res.status(200).json({
+      status: "success",
+      data: { chat },
+    });
+  } catch (error) {
+    console.log("checkPvtChatByMembers - chat.controller.js ", error);
+    return res.status(500).json({
+      status: "error",
+      message: "Internal server error.",
+    });
+  }
+};
+
+module.exports = { createNewChat, getChats, checkPvtChatByMembers };

@@ -19,7 +19,8 @@ const getMessagesByChatID = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
-  const { senderID, chatID, text, image } = req.body();
+  const senderID = req.user._id;
+  const { chatID, text, image } = req.body();
   if (!text && !image) {
     res.status(400).json({
       status: "fail",

@@ -22,6 +22,8 @@ const addUserFromCookie = createAsyncThunk(
       const data = await res.json();
       return data.data.user;
     } catch (error) {
+      console.log("addUserFromCookie - userSlice ", error);
+
       return rejectWithValue(error);
     }
   }

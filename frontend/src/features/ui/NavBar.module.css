@@ -19,7 +19,7 @@ nav > p {
   color: white;
 }
 
-nav > input {
+nav input {
   width: 300px;
   height: 35px;
   outline: none;
@@ -28,6 +28,13 @@ nav > input {
   padding: 0px 15px;
   background: rgb(196, 176, 240);
   transition: all 200ms;
+}
+nav input:focus {
+  transform: scaleX(1.05);
+}
+
+nav > div {
+  position: relative;
 }
 
 nav > input:focus {
