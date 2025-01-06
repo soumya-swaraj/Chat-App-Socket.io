@@ -1,0 +1,18 @@
+.userList {
+  width: 320px;
+  max-height: 70dvh;
+  min-height: 60px;
+  background: rgb(220, 208, 247);
+  position: absolute;
+  top: 70px;
+  right: -10px;
+  overflow-y: auto;
+  border-radius: 20px;
+  transition: all 300ms;
+  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 10px;
+}

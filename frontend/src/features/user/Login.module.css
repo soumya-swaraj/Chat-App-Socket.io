@@ -1,0 +1,143 @@
+.mainContainer {
+  display: flex;
+}
+
+.rightContainer {
+  position: relative;
+  background-color: rgb(150, 113, 229);
+  width: 50%;
+  height: 100dvh;
+  border-bottom-left-radius: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.leftContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logoContainer {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: fit-content;
+  height: fit-content;
+}
+
+.logoContainer > img {
+  height: 50px;
+}
+
+.logoContainer > span {
+  font-size: 30px;
+  color: white;
+}
+
+.quoteContainer {
+  width: fit-content;
+}
+
+.quoteContainer > .firstLine {
+  font-size: 25px;
+  color: white;
+}
+
+.quoteContainer > .secondLine {
+  color: white;
+  font-size: 30px;
+}
+
+.leftContainer > form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.leftContainer > form > div:first-of-type {
+  margin-bottom: 20px;
+}
+
+.leftContainer > form > div:first-of-type > h1,
+.leftContainer > form > div:first-of-type > h3 {
+  font-weight: 200;
+  text-align: center;
+}
+
+.inputContainer {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  column-gap: 30px;
+  justify-content: space-between;
+  align-self: self-start;
+}
+
+.inputContainer > label {
+  font-size: 11px;
+  margin-bottom: 5px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.inputContainer > input {
+  font-size: 15px;
+  height: 35px;
+  width: 320px;
+  padding: 0px 15px;
+  border-radius: 10px;
+  outline: none;
+  border: 2.5px solid #b5b5b5;
+}
+
+.inputContainer > input:focus {
+  border-radius: 12px;
+  transition: all 300ms;
+  border: 2.5px solid rgb(150, 113, 229);
+}
+
+.btnContainer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.btnContainer > button {
+  width: 100px;
+  height: 38px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  background-color: rgb(150, 113, 229);
+  color: white;
+}
+
+.btnContainer > button:disabled {
+  background-color: rgb(197, 177, 239);
+  cursor: not-allowed;
+}
+
+.passwordContainer {
+  position: relative;
+}
+
+.passwordContainer > img {
+  position: absolute;
+  top: 26px;
+  right: 12px;
+  height: 24px;
+  width: 24px;
+}
+
+.leftContainer > div:last-child {
+  margin-top: 30px;
+}

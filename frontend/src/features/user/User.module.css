@@ -1,0 +1,31 @@
+.userCardContainer {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  transition: all 200ms;
+}
+
+.userCardContainer > img {
+  background-color: rgb(194, 194, 194);
+  height: 40px;
+  width: 40px;
+  border-radius: 9999px;
+  border: 2px solid white;
+}
+
+.userCardContainer:hover {
+  transform: scale(1.02);
+}
+
+.username {
+  font-size: 15px;
+  color: gray;
+}
+
+.name {
+  font-size: 17px;
+}

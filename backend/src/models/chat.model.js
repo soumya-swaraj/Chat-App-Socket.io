@@ -4,6 +4,9 @@ const schema = new mongoose.Schema({
   chatName: {
     type: String,
   },
+  image: {
+    type: String,
+  },
   admins: [
     {
       type: mongoose.Schema.Types.ObjectId,

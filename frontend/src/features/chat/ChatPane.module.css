@@ -1,0 +1,61 @@
+.chatPaneMainContainer {
+  width: 350px;
+  height: calc(100% - 4px);
+  background-color: rgb(167, 149, 206);
+  display: flex;
+  flex-direction: column;
+  border-top: 3px solid white;
+  padding: 20px;
+  transition: all 300ms;
+  overflow: hidden;
+}
+
+.chatPaneClose {
+  width: 100px;
+}
+
+.chatPaneMainContainer > .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatPaneMainContainer > .header > input {
+  height: 30px;
+  width: 250px;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  padding: 0 10px;
+  background-color: rgb(223, 219, 232);
+  transition: all 200ms;
+}
+
+.chatPaneMainContainer > .header > input:focus {
+  transform: scale(1.03);
+}
+
+.chatPaneMainContainer > .header > button {
+  background-color: transparent;
+  outline: none;
+  border: none;
+}
+
+.chatPaneMainContainer > .header > button > img {
+  height: 30px;
+  background-color: transparent;
+}
+
+.userContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 10px;
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+
+.userContainer::-webkit-scrollbar {
+  display: none;
+}

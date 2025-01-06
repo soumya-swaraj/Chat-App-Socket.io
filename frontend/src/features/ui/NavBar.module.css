@@ -1,0 +1,56 @@
+nav {
+  height: 60px;
+  background-color: rgb(150, 113, 229);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.rightContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.profilePic {
+  height: 43px;
+  height: 35px;
+}
+
+.createGroup {
+  height: 43px;
+  border-radius: 999999px;
+  border: 1px solid white;
+}
+
+nav > p {
+  user-select: none;
+  font-size: 30px;
+  color: white;
+}
+
+nav input {
+  width: 300px;
+  height: 35px;
+  outline: none;
+  border-radius: 999px;
+  border: none;
+  padding: 0px 15px;
+  background: rgb(196, 176, 240);
+  transition: all 200ms;
+}
+nav input:focus {
+  transform: scaleX(1.05);
+}
+
+nav > div {
+  position: relative;
+}
+
+nav > input:focus {
+  width: 310px;
+  height: 40px;
+}

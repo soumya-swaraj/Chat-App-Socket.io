@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     username: {
       type: String,
       unique: true,
@@ -19,7 +23,7 @@ const schema = new mongoose.Schema(
     profilePic: {
       type: String,
       default:
-        "https://res.cloudinary.com/dli5cdsx2/image/upload/sec1axfueyux9h8mxava",
+        "https://res.cloudinary.com/dli5cdsx2/image/upload/v1735420627/m2roxyccjigixm3fraqr.png",
     },
   },
   { timestamps: true }

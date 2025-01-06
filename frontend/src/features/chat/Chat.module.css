@@ -1,0 +1,27 @@
+.chatContainer {
+  width: 100%;
+  background: rgb(196, 176, 240);
+  border-radius: 15px;
+  padding: 7px 10px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  transition: all 200ms;
+  user-select: none;
+}
+
+.chatContainer:hover {
+  background: rgb(180, 159, 225);
+}
+
+.chatContainer > img {
+  height: 40px;
+  border-radius: 9999px;
+  border: 2px solid white;
+}
+
+.chatContainer > p {
+  white-space: nowrap;
+}

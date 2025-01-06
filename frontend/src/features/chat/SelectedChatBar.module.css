@@ -1,0 +1,22 @@
+.mainBar {
+  height: 60px;
+  width: 100%;
+  background-color: rgb(167, 149, 206);
+  margin-top: 3px;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 15px;
+}
+
+.mainBar > img {
+  height: 40px;
+  border-radius: 9999px;
+  border: 2px solid white;
+}
+
+.mainBar > P {
+  font-size: 20px;
+}
