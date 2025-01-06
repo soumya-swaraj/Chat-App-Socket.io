@@ -1,0 +1,16 @@
+.messageContainer {
+  flex-grow: 1;
+  max-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  margin: 8px 10px;
+}
+
+.messageContainer > p {
+  font-size: 12px;
+  margin: 0 4px;
+}
+
+.myMessage {
+  align-items: end;
+}

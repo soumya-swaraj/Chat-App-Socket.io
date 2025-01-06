@@ -1,13 +1,13 @@
 .chatPaneMainContainer {
   width: 350px;
-  height: 99.6%;
+  height: calc(100% - 4px);
   background-color: rgb(167, 149, 206);
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   border-top: 3px solid white;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
   padding: 20px;
   transition: all 300ms;
+  overflow: hidden;
 }
 
 .chatPaneClose {
@@ -48,4 +48,14 @@
 
 .userContainer {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 10px;
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+
+.userContainer::-webkit-scrollbar {
+  display: none;
 }

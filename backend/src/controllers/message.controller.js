@@ -5,7 +5,7 @@ const getMessagesByChatID = async (req, res) => {
   const { id: chatID } = req.params;
   try {
     const messages = await Message.find({ chatID });
-    req.status(200).json({
+    res.status(200).json({
       status: "success",
       data: { messages },
     });
@@ -20,7 +20,7 @@ const getMessagesByChatID = async (req, res) => {
 
 const sendMessage = async (req, res) => {
   const senderID = req.user._id;
-  const { chatID, text, image } = req.body();
+  const { chatID, text, image } = req.body;
   if (!text && !image) {
     res.status(400).json({
       status: "fail",

@@ -9,10 +9,11 @@
   gap: 10px;
   flex-wrap: nowrap;
   transition: all 200ms;
+  user-select: none;
 }
 
 .chatContainer:hover {
-  transform: scale(1.02);
+  background: rgb(180, 159, 225);
 }
 
 .chatContainer > img {

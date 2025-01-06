@@ -119,6 +119,7 @@ const logout = (req, res) => {
 const getUser = (req, res) => {
   const user = req.user;
   const filteredUser = {
+    name: user.name,
     username: user.username,
     _id: user._id,
     email: user.email,
@@ -225,7 +226,7 @@ const getUserByID = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id).select("-password");
     if (!user)
       return res.status(400).json({
         status: "fail",

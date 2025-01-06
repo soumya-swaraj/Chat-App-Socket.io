@@ -1,0 +1,42 @@
+.mainBar {
+  height: 60px;
+  width: 100%;
+  background-color: rgb(167, 149, 206);
+  margin-top: 3px;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 15px;
+}
+
+.mainBar > button {
+  outline: none;
+  background-color: transparent;
+  border: none;
+}
+
+.mainBar > button:disabled {
+  cursor: not-allowed;
+}
+
+.mainBar > button > img {
+  height: 30px;
+}
+
+.mainBar > textarea {
+  flex-grow: 1;
+  height: 35px;
+  border-radius: 9999px;
+  border: none;
+  background-color: rgb(223, 219, 232);
+  outline: none;
+  padding: 8px 10px;
+  resize: none;
+  overflow: auto;
+}
+
+.mainBar > textarea::-webkit-scrollbar {
+  display: none;
+}

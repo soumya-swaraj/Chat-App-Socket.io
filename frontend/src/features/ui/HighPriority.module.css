@@ -1,0 +1,14 @@
+.mainContainer {
+  height: 100dvh;
+  width: 100dvw;
+  background-color: rgba(128, 128, 128, 0.599);
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(1px);
+  transition: all 200ms;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,13 @@
+.mainContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainContainer > p {
+  font-size: 30px;
+  color: rgb(200, 199, 199);
+  font-weight: 400;
+}
