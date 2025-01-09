@@ -16,10 +16,10 @@ const router = express.Router();
 
 router.post("/", signup);
 router.get("/", authUser, getUser);
-router.get("/:id", authUser, getUserByID);
-router.get("/all/:regex", authUser, getAllUser);
 router.post("/login", login);
 router.get("/logout", logout);
+router.get("/:id", authUser, getUserByID);
+router.get("/all/:regex", authUser, getAllUser);
 router.get("/check/:username", checkUsername);
 router.patch("/update/profilePic", authUser, updateProfilePic);
 

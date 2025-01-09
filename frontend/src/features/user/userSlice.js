@@ -32,6 +32,14 @@ const addUserFromCookie = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
+  reducers: {
+    removeUser(state) {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.loading = "idle";
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addUserFromCookie.fulfilled, function (state, action) {
@@ -50,8 +58,9 @@ const userSlice = createSlice({
   },
 });
 
-const selectAuth = (state) => state.user;
+const { removeUser } = userSlice.actions;
 
+const selectAuth = (state) => state.user;
 const selectUser = createSelector([selectAuth], (user) => user.user);
 const selectIsAuthenticated = createSelector(
   [selectAuth],
@@ -59,5 +68,11 @@ const selectIsAuthenticated = createSelector(
 );
 const selectLoading = createSelector([selectAuth], (user) => user.loading);
 
-export { addUserFromCookie, selectUser, selectIsAuthenticated, selectLoading };
+export {
+  addUserFromCookie,
+  selectUser,
+  selectIsAuthenticated,
+  selectLoading,
+  removeUser,
+};
 export default userSlice.reducer;

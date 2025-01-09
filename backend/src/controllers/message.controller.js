@@ -2,8 +2,6 @@ const Message = require("../models/message.model.js");
 const { io } = require("../socket.js");
 const cloudinary = require("../util/cloudinary.util.js");
 
-console.log(io);
-
 const getMessagesByChatID = async (req, res) => {
   const { id: chatID } = req.params;
   try {
