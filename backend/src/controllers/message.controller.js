@@ -1,5 +1,8 @@
 const Message = require("../models/message.model.js");
+const { io } = require("../socket.js");
 const cloudinary = require("../util/cloudinary.util.js");
+
+console.log(io);
 
 const getMessagesByChatID = async (req, res) => {
   const { id: chatID } = req.params;
@@ -22,9 +25,15 @@ const sendMessage = async (req, res) => {
   const senderID = req.user._id;
   const { chatID, text, image } = req.body;
   if (!text && !image) {
-    res.status(400).json({
+    return res.status(400).json({
       status: "fail",
       message: "Message content is missing",
+    });
+  }
+  if (!chatID) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Chat ID is missing",
     });
   }
   try {
@@ -38,7 +47,9 @@ const sendMessage = async (req, res) => {
       ...(text && { text }),
       ...(image && { image: imageUrl }),
     }).save();
-    //todo: if user is online then send the message by Socket.io
+
+    io.to(chatID).emit("new message", message);
+
     res.status(200).json({
       status: "success",
       data: { message },

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import chatReducer from "../features/chat/chatSlice";
+import chatReducer from "../features/chat/ChatSlice";
 import userReducer from "../features/user/userSlice";
 
 export default configureStore({
@@ -7,4 +7,11 @@ export default configureStore({
     user: userReducer,
     chat: chatReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: ["chat.socket"],
+        ignoredActions: ["chat/setSocket"],
+      },
+    }),
 });
