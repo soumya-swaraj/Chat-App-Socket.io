@@ -12,6 +12,7 @@ const initialState = {
   messageLoading: "", //'idle' | 'pending' | 'succeeded' | 'failed',
   chatError: "",
   messageError: "",
+  socket: null,
 };
 
 const fetchChats = createAsyncThunk(
@@ -71,6 +72,9 @@ const chatSlice = createSlice({
     addMessage(state, action) {
       state.messages.push(action.payload);
     },
+    setSocket(state, action) {
+      state.socket = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -99,7 +103,7 @@ const chatSlice = createSlice({
   },
 });
 
-const { setSelectedChat, addChat, addMessage } = chatSlice.actions;
+const { setSelectedChat, addChat, addMessage, setSocket } = chatSlice.actions;
 
 const selectChat = (state) => state.chat;
 const selectChats = createSelector([selectChat], (chat) => chat.chats);
@@ -116,6 +120,7 @@ const selectMessageLoading = createSelector(
   [selectChat],
   (chat) => chat.messageLoading
 );
+const selectSocket = createSelector([selectChat], (chat) => chat.socket);
 
 export {
   fetchChats,
@@ -123,10 +128,12 @@ export {
   setSelectedChat,
   addChat,
   addMessage,
+  setSocket,
   selectChats,
   selectChatLoading,
   selectSelectedChat,
   selectMessages,
   selectMessageLoading,
+  selectSocket,
 };
 export default chatSlice.reducer;

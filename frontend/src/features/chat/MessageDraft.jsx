@@ -28,6 +28,10 @@ function MessageDraft() {
     <div className={styles.mainBar}>
       <textarea
         value={text}
+        onKeyDown={(e) => {
+          if (e.shiftKey) return;
+          if (e.key === "Enter") sendMessage();
+        }}
         onChange={(e) => {
           setText(e.target.value);
         }}

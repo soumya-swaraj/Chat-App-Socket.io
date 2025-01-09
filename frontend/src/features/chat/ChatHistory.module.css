@@ -3,4 +3,9 @@
   flex-grow: 1;
   flex-direction: column;
   flex-wrap: nowrap;
+  overflow-y: auto;
+}
+
+.mainContainer::-webkit-scrollbar {
+  display: none;
 }

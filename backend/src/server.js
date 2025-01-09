@@ -1,16 +1,13 @@
-const http = require("http");
 const express = require("express");
 const dotenv = require("dotenv");
 const userRouter = require("./routes/user.route.js");
 const cookieParser = require("cookie-parser");
 const chatRouter = require("./routes/chat.route.js");
 const messageRouter = require("./routes/message.route.js");
+const { app, httpServer, io } = require("./socket.js");
 const cors = require("cors");
 
 dotenv.config();
-
-const app = express();
-const httpServer = http.createServer(app);
 
 require("./db");
 
