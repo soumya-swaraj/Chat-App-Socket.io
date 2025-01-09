@@ -9,6 +9,7 @@ import styles from "./NavBar.module.css";
 import HighPriority from "./HighPriority";
 import CreateGroup from "../chat/CreateGroup";
 import { useNavigate } from "react-router-dom";
+import { reset as resetChat } from "../chat/ChatSlice";
 
 function NavBar() {
   const [regex, setRegex] = useState("");
@@ -48,6 +49,7 @@ function NavBar() {
     const data = await res.json();
     if (data.status === "success") {
       dispatch(removeUser());
+      dispatch(resetChat());
       navigate("/login");
     }
   }
@@ -74,13 +76,16 @@ function NavBar() {
       <div className={styles.rightContainer}>
         <img
           src={createGroupImg}
-          className={styles.profilePic}
+          className={styles.leftIcon}
           onClick={() => {
             setShowCreateGroupOverlay(true);
           }}
         />
-        <img className={styles.leaveImg} src={leaveImg} onClick={logout} />
-        <img src={user.profilePic} className={styles.createGroup} />
+        <img className={styles.leftIcon} src={leaveImg} onClick={logout} />
+        <img
+          src={user.profilePic}
+          className={styles.leftIcon + " " + styles.profilePic}
+        />
       </div>
       {showCreateGroupOverlay && (
         <HighPriority>

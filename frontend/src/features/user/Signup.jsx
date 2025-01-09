@@ -135,6 +135,7 @@ function Signup() {
       );
       const data = await res.json();
       if (data.status === "success") {
+        dispatch(addUserFromCookie());
         navigate("/");
       } else if (data.message === "fail") {
         toast("try again");

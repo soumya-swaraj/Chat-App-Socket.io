@@ -16,8 +16,9 @@ nav {
 }
 
 .profilePic {
-  height: 43px;
   height: 35px;
+  height: 35px;
+  overflow: hidden;
 }
 
 .createGroup {
@@ -57,4 +58,14 @@ nav > input:focus {
 
 .leaveImg {
   height: 35px;
+}
+
+.leftIcon {
+  height: 35px;
+  width: 35px;
+}
+
+.profilePic {
+  border-radius: 9999px;
+  border: 2px solid white;
 }

@@ -75,6 +75,16 @@ const chatSlice = createSlice({
     setSocket(state, action) {
       state.socket = action.payload;
     },
+    reset(state) {
+      state.chats = [];
+      state.messages = [];
+      state.selectedChat = null;
+      state.chatLoading = "";
+      state.messageLoading = "";
+      state.chatError = "";
+      state.messageError = "";
+      state.socket = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -103,7 +113,8 @@ const chatSlice = createSlice({
   },
 });
 
-const { setSelectedChat, addChat, addMessage, setSocket } = chatSlice.actions;
+const { setSelectedChat, addChat, addMessage, setSocket, reset } =
+  chatSlice.actions;
 
 const selectChat = (state) => state.chat;
 const selectChats = createSelector([selectChat], (chat) => chat.chats);
@@ -123,6 +134,7 @@ const selectMessageLoading = createSelector(
 const selectSocket = createSelector([selectChat], (chat) => chat.socket);
 
 export {
+  reset,
   fetchChats,
   fetchMessages,
   setSelectedChat,
