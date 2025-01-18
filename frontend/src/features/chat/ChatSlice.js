@@ -12,15 +12,19 @@ const initialState = {
   messageLoading: "", //'idle' | 'pending' | 'succeeded' | 'failed',
   chatError: "",
   messageError: "",
+  socket: null,
 };
 
 const fetchChats = createAsyncThunk(
   "chat/fetch",
   async function (_, { rejectWithValue }) {
     try {
-      const res = await fetch("http://localhost:4000/api/v1/chat/", {
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_API_URL_V1}chat/`,
+        {
+          credentials: "include",
+        }
+      );
       if (!res.ok) {
         const data = await res.json();
         return rejectWithValue(data.message);
@@ -40,7 +44,9 @@ const fetchMessages = createAsyncThunk(
     const state = getState();
     try {
       const res = await fetch(
-        `http://localhost:4000/api/v1/message/${state.chat.selectedChat._id}`,
+        `${import.meta.env.VITE_API_BASE_API_URL_V1}message/${
+          state.chat.selectedChat._id
+        }`,
         {
           credentials: "include",
         }
@@ -71,6 +77,19 @@ const chatSlice = createSlice({
     addMessage(state, action) {
       state.messages.push(action.payload);
     },
+    setSocket(state, action) {
+      state.socket = action.payload;
+    },
+    reset(state) {
+      state.chats = [];
+      state.messages = [];
+      state.selectedChat = null;
+      state.chatLoading = "";
+      state.messageLoading = "";
+      state.chatError = "";
+      state.messageError = "";
+      state.socket = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -99,7 +118,8 @@ const chatSlice = createSlice({
   },
 });
 
-const { setSelectedChat, addChat, addMessage } = chatSlice.actions;
+const { setSelectedChat, addChat, addMessage, setSocket, reset } =
+  chatSlice.actions;
 
 const selectChat = (state) => state.chat;
 const selectChats = createSelector([selectChat], (chat) => chat.chats);
@@ -116,17 +136,21 @@ const selectMessageLoading = createSelector(
   [selectChat],
   (chat) => chat.messageLoading
 );
+const selectSocket = createSelector([selectChat], (chat) => chat.socket);
 
 export {
+  reset,
   fetchChats,
   fetchMessages,
   setSelectedChat,
   addChat,
   addMessage,
+  setSocket,
   selectChats,
   selectChatLoading,
   selectSelectedChat,
   selectMessages,
   selectMessageLoading,
+  selectSocket,
 };
 export default chatSlice.reducer;

@@ -20,10 +20,13 @@ function Chat({ chat, isUserPaneOpen }) {
           "https://res.cloudinary.com/dli5cdsx2/image/upload/v1735739234/h2fxhzv5qolpnhicafwh.png"
       );
     } else {
-      const opponentID = members.find((id) => id !== myID);
+      let opponentID = members.find((id) => id !== myID);
+      if (!opponentID) {
+        opponentID = myID;
+      }
       async function fetchUser() {
         const res = await fetch(
-          `http://localhost:4000/api/v1/user/${opponentID}`,
+          `${import.meta.env.VITE_API_BASE_API_URL_V1}user/${opponentID}`,
           { credentials: "include" }
         );
         const data = await res.json();
@@ -32,7 +35,7 @@ function Chat({ chat, isUserPaneOpen }) {
       }
       fetchUser();
     }
-  }, [chat.chatName, isGroupChat, members, myID]);
+  }, [chat.chatName, chat.image, isGroupChat, members, myID]);
   return (
     <div
       className={styles.chatContainer}

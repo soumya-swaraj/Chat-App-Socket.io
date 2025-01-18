@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import styles from "./ChatHistory.module.css";
 import MessageContainer from "./MessageContainer";
 import {
+  addMessage,
   fetchMessages,
   selectMessageLoading,
   selectMessages,
   selectSelectedChat,
+  selectSocket,
 } from "./ChatSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../user/userSlice";
 
 function ChatHistory() {
   const dispatch = useDispatch();
@@ -16,6 +19,21 @@ function ChatHistory() {
   const selectedChat = useSelector(selectSelectedChat);
   const [members, setMembers] = useState([]);
   const [membersLoading, setMembersLoading] = useState(true);
+  const socket = useSelector(selectSocket);
+  const user = useSelector(selectUser);
+
+  useEffect(() => {
+    if (socket?.connected) {
+      socket.on("new message", (message) => {
+        if (
+          message.chatID === selectedChat._id &&
+          message.senderID !== user._id
+        ) {
+          dispatch(addMessage(message));
+        }
+      });
+    }
+  }, [dispatch, selectedChat._id, socket, user._id]);
 
   useEffect(() => {
     async function fetchMember() {
@@ -24,7 +42,7 @@ function ChatHistory() {
         const memberData = await Promise.all(
           selectedChat.members.map(async (member) => {
             const res = await fetch(
-              `http://localhost:4000/api/v1/user/${member}`,
+              `${import.meta.env.VITE_API_BASE_API_URL_V1}user/${member}`,
               {
                 credentials: "include",
               }

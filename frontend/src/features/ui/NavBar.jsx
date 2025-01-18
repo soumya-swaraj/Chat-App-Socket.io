@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import UserList from "../user/UserList";
-import { selectUser } from "../user/userSlice";
+import { removeUser, selectUser } from "../user/userSlice";
 import "./NavBar.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import createGroupImg from "../../assets/create-group-button.png";
+import leaveImg from "../../assets/leave.png";
 import styles from "./NavBar.module.css";
 import HighPriority from "./HighPriority";
 import CreateGroup from "../chat/CreateGroup";
+import { useNavigate } from "react-router-dom";
+import { reset as resetChat } from "../chat/ChatSlice";
 
 function NavBar() {
   const [regex, setRegex] = useState("");
@@ -14,13 +17,15 @@ function NavBar() {
   const user = useSelector(selectUser);
   const [isUserLoading, setIsUserLoading] = useState(false);
   const [showCreateGroupOverlay, setShowCreateGroupOverlay] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchUsers() {
       try {
         setIsUserLoading(true);
         const res = await fetch(
-          `http://localhost:4000/api/v1/user/all/${regex}`,
+          `${import.meta.env.VITE_API_BASE_API_URL_V1}user/all/${regex}`,
           {
             credentials: "include",
           }
@@ -36,6 +41,21 @@ function NavBar() {
     if (regex) fetchUsers();
     if (!regex) setUsers([]);
   }, [regex]);
+
+  async function logout() {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_API_URL_V1}user/logout`,
+      {
+        credentials: "include",
+      }
+    );
+    const data = await res.json();
+    if (data.status === "success") {
+      dispatch(removeUser());
+      dispatch(resetChat());
+      navigate("/login");
+    }
+  }
 
   return (
     <nav>
@@ -59,12 +79,16 @@ function NavBar() {
       <div className={styles.rightContainer}>
         <img
           src={createGroupImg}
-          className={styles.profilePic}
+          className={styles.leftIcon}
           onClick={() => {
             setShowCreateGroupOverlay(true);
           }}
         />
-        <img src={user.profilePic} className={styles.createGroup} />
+        <img className={styles.leftIcon} src={leaveImg} onClick={logout} />
+        <img
+          src={user.profilePic}
+          className={styles.leftIcon + " " + styles.profilePic}
+        />
       </div>
       {showCreateGroupOverlay && (
         <HighPriority>

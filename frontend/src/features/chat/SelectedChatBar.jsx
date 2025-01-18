@@ -20,7 +20,7 @@ function SelectedChatBar() {
       const opponentID = selectChat.members.find((id) => id !== myID);
       async function fetchUser() {
         const res = await fetch(
-          `http://localhost:4000/api/v1/user/${opponentID}`,
+          `${import.meta.env.VITE_API_BASE_API_URL_V1}user/${opponentID}`,
           { credentials: "include" }
         );
         const data = await res.json();

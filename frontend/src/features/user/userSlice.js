@@ -12,9 +12,12 @@ const addUserFromCookie = createAsyncThunk(
   "user/addUser",
   async function (_, { rejectWithValue }) {
     try {
-      const res = await fetch("http://localhost:4000/api/v1/user/", {
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_API_URL_V1}user/`,
+        {
+          credentials: "include",
+        }
+      );
       if (!res.ok) {
         const data = await res.json();
         return rejectWithValue(data.message);
@@ -32,6 +35,14 @@ const addUserFromCookie = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
+  reducers: {
+    removeUser(state) {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.loading = "idle";
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addUserFromCookie.fulfilled, function (state, action) {
@@ -50,8 +61,9 @@ const userSlice = createSlice({
   },
 });
 
-const selectAuth = (state) => state.user;
+const { removeUser } = userSlice.actions;
 
+const selectAuth = (state) => state.user;
 const selectUser = createSelector([selectAuth], (user) => user.user);
 const selectIsAuthenticated = createSelector(
   [selectAuth],
@@ -59,5 +71,11 @@ const selectIsAuthenticated = createSelector(
 );
 const selectLoading = createSelector([selectAuth], (user) => user.loading);
 
-export { addUserFromCookie, selectUser, selectIsAuthenticated, selectLoading };
+export {
+  addUserFromCookie,
+  selectUser,
+  selectIsAuthenticated,
+  selectLoading,
+  removeUser,
+};
 export default userSlice.reducer;
