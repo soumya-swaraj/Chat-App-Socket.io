@@ -12,9 +12,12 @@ const addUserFromCookie = createAsyncThunk(
   "user/addUser",
   async function (_, { rejectWithValue }) {
     try {
-      const res = await fetch("http://localhost:4000/api/v1/user/", {
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_API_URL_V1}user/`,
+        {
+          credentials: "include",
+        }
+      );
       if (!res.ok) {
         const data = await res.json();
         return rejectWithValue(data.message);

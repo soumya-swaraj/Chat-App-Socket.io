@@ -1,6 +1,8 @@
 async function checkPvtChatByMembers(id1, id2) {
   const res = await fetch(
-    `http://localhost:4000/api/v1/chat/check?members=${id1},${id2}`,
+    `${
+      import.meta.env.VITE_API_BASE_API_URL_V1
+    }chat/check?members=${id1},${id2}`,
     { credentials: "include" }
   );
   const data = await res.json();
@@ -8,7 +10,7 @@ async function checkPvtChatByMembers(id1, id2) {
 }
 
 async function createNewPvtChat(members) {
-  const res = await fetch(`http://localhost:4000/api/v1/chat/`, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_API_URL_V1}chat/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ members, isGroupChat: false }),
@@ -39,18 +41,21 @@ function convertToIST(isoTimestamp) {
 
 async function postMessage(chatID, text, image) {
   if ((!image && !text) || !chatID) return;
-  const res = await fetch("http://localhost:4000/api/v1/message", {
-    method: "POST",
-    body: JSON.stringify({
-      chatID,
-      ...(image && { image }),
-      ...(text && { text }),
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_API_URL_V1}message`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        chatID,
+        ...(image && { image }),
+        ...(text && { text }),
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
   const data = await res.json();
   return data.data.message;
 }
