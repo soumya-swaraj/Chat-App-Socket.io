@@ -21,14 +21,17 @@ function Login() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/api/v1/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ identifier, password }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_API_URL_V1}user/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ identifier, password }),
+        }
+      );
       const data = await res.json();
       if (data.status === "fail") {
         toast(data.message);

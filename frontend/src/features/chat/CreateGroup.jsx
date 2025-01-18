@@ -21,7 +21,7 @@ function CreateGroup({ setShowCreateGroupOverlay }) {
     async function fetchUsers() {
       try {
         const res = await fetch(
-          `http://localhost:4000/api/v1/user/all/${userRegex}`,
+          `${import.meta.env.VITE_API_BASE_API_URL_V1}user/all/${userRegex}`,
           {
             credentials: "include",
           }
@@ -46,18 +46,21 @@ function CreateGroup({ setShowCreateGroupOverlay }) {
   async function createGroup() {
     try {
       setIsCreatingGroup(true);
-      const res = await fetch("http://localhost:4000/api/v1/chat/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chatName: groupName,
-          ...(image && { image }),
-          admins: [me],
-          members,
-          isGroupChat: true,
-        }),
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_API_URL_V1}chat/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chatName: groupName,
+            ...(image && { image }),
+            admins: [me],
+            members,
+            isGroupChat: true,
+          }),
+          credentials: "include",
+        }
+      );
       const data = await res.json();
 
       setShowCreateGroupOverlay(false);

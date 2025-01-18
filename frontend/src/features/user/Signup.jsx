@@ -36,7 +36,7 @@ function Signup() {
     async function checkUsername() {
       try {
         const data = await fetch(
-          `http://localhost:4000/api/v1/user/check/${username}`,
+          `${import.meta.env.VITE_API_BASE_API_URL_V1}user/check/${username}`,
           { signal: controller.signal }
         );
         const res = await data.json();
@@ -87,20 +87,23 @@ function Signup() {
     }
     try {
       setIsLoading(true);
-      const res = await fetch("http://localhost:4000/api/v1/user/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          credentials: true,
-        },
-        body: JSON.stringify({
-          name,
-          username,
-          email,
-          password,
-        }),
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_API_URL_V1}user/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            credentials: true,
+          },
+          body: JSON.stringify({
+            name,
+            username,
+            email,
+            password,
+          }),
+          credentials: "include",
+        }
+      );
       const data = await res.json();
       if (data.status === "fail") {
         toast(data.message);
@@ -123,7 +126,7 @@ function Signup() {
     try {
       setIsLoading(true);
       const res = await fetch(
-        "http://localhost:4000/api/v1/user/update/profilePic",
+        `${import.meta.env.VITE_API_BASE_API_URL_V1}user/update/profilePic`,
         {
           method: "PATCH",
           headers: {

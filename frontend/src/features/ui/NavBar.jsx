@@ -25,7 +25,7 @@ function NavBar() {
       try {
         setIsUserLoading(true);
         const res = await fetch(
-          `http://localhost:4000/api/v1/user/all/${regex}`,
+          `${import.meta.env.VITE_API_BASE_API_URL_V1}user/all/${regex}`,
           {
             credentials: "include",
           }
@@ -43,9 +43,12 @@ function NavBar() {
   }, [regex]);
 
   async function logout() {
-    const res = await fetch("http://localhost:4000/api/v1/user/logout", {
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_API_URL_V1}user/logout`,
+      {
+        credentials: "include",
+      }
+    );
     const data = await res.json();
     if (data.status === "success") {
       dispatch(removeUser());

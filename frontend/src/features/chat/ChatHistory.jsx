@@ -42,7 +42,7 @@ function ChatHistory() {
         const memberData = await Promise.all(
           selectedChat.members.map(async (member) => {
             const res = await fetch(
-              `http://localhost:4000/api/v1/user/${member}`,
+              `${import.meta.env.VITE_API_BASE_API_URL_V1}user/${member}`,
               {
                 credentials: "include",
               }
