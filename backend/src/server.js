@@ -18,6 +18,6 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/chat", chatRouter);
 app.use("/api/v1/message", messageRouter);
 
-httpServer.listen(process.env.PORT, () => {
+httpServer.listen(process.env.PORT || 4000, () => {
   console.log(`Server is running on ${process.env.PORT || 4000}`);
 });

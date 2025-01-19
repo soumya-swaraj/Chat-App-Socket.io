@@ -39,7 +39,19 @@ const getChats = async (req, res) => {
   try {
     const { _id: userID } = req.user;
 
-    const chats = await Chat.find({ members: { $in: [userID] } });
+    // const chats = await Chat.find({ members: { $in: [userID] } });
+    const chats = await Chat.aggregate([
+      { $match: { members: { $in: [userID] } } },
+      {
+        $lookup: {
+          from: "messages",
+          localField: "_id",
+          foreignField: "chatID",
+          as: "messages",
+        },
+      },
+    ]);
+
     return res.status(200).json({
       status: "success",
       data: { chats },
