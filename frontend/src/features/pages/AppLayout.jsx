@@ -3,6 +3,7 @@ import ChatPane from "../chat/ChatPane";
 import NavBar from "../ui/NavBar";
 import styles from "./AppLayout.module.css";
 import {
+  addChat,
   selectChats,
   selectSelectedChat,
   selectSocket,
@@ -14,18 +15,24 @@ import MessageDraft from "../chat/MessageDraft";
 import ChatHistory from "../chat/ChatHistory";
 import { useEffect } from "react";
 import { io } from "socket.io-client";
+import { selectUser } from "../user/userSlice";
 
 function HomePage() {
   const selectedChat = useSelector(selectSelectedChat);
   const socket = useSelector(selectSocket);
   const dispatch = useDispatch();
   const chats = useSelector(selectChats);
+  const { _id: myID } = useSelector(selectUser);
 
   useEffect(() => {
     if (!socket?.connected) {
       const socket = io(import.meta.env.VITE_BASE_URL);
       socket.on("connect", () => {
         dispatch(setSocket(socket));
+      });
+      socket.on("new chat", (chat) => {
+        dispatch(addChat(chat));
+        socket.emit("join chats", [chat._id]);
       });
       socket.on("disconnect", () => {
         dispatch(setSocket(null));
@@ -36,9 +43,9 @@ function HomePage() {
   useEffect(() => {
     if (socket?.connected) {
       const chatIDs = chats.map((chat) => chat._id);
-      socket.emit("join chats", chatIDs);
+      socket.emit("join chats", [...chatIDs, myID]);
     }
-  }, [chats, socket]);
+  }, [chats, socket, myID]);
 
   return (
     <div className={styles.topContainer}>

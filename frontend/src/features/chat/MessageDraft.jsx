@@ -18,7 +18,7 @@ function MessageDraft() {
     setSending(true);
     console.log("Sending...");
     const message = await postMessage(chat._id, text, image);
-    dispatch(addMessage(message));
+    dispatch(addMessage({ message, chatID: chat._id }));
     setSending(false);
     setText("");
     setImage("");

@@ -1,4 +1,5 @@
 const { Chat } = require("../models/chat.model.js");
+const { io } = require("../socket.js");
 const cloudinary = require("../util/cloudinary.util.js");
 
 const createNewChat = async (req, res) => {
@@ -23,6 +24,14 @@ const createNewChat = async (req, res) => {
       members,
       isGroupChat,
     }).save();
+    const _chat = chat.toObject();
+
+    members.map((memberID) => {
+      console.log(memberID);
+
+      io.to(memberID).emit("new chat", { ..._chat, messages: [] });
+    });
+
     return res.status(201).json({
       status: "success",
       data: { chat },
@@ -78,6 +87,7 @@ const checkPvtChatByMembers = async (req, res) => {
       isGroupChat: false,
       members: { $size: 2, $all: members },
     });
+
     return res.status(200).json({
       status: "success",
       data: { chat },
