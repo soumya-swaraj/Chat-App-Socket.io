@@ -5,7 +5,7 @@ import UserListForGroupChat from "./UserListForGroupChat";
 import pencil from "../../assets/pencil.png";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../user/userSlice";
-import { addChat } from "./ChatSlice";
+import { setSelectedChat } from "./ChatSlice";
 
 function CreateGroup({ setShowCreateGroupOverlay }) {
   const me = useSelector(selectUser);
@@ -55,7 +55,7 @@ function CreateGroup({ setShowCreateGroupOverlay }) {
             chatName: groupName,
             ...(image && { image }),
             admins: [me],
-            members,
+            members: members.map((_member) => _member._id),
             isGroupChat: true,
           }),
           credentials: "include",
@@ -65,7 +65,7 @@ function CreateGroup({ setShowCreateGroupOverlay }) {
 
       setShowCreateGroupOverlay(false);
       setIsCreatingGroup(false);
-      dispatch(addChat(data.data.chat));
+      dispatch(setSelectedChat({ ...data.data.chat, messages: [] }));
     } catch (error) {
       console.log("createGroup - CreateGroup.jsx", error);
     }

@@ -26,9 +26,10 @@ const createNewChat = async (req, res) => {
     }).save();
     const _chat = chat.toObject();
 
-    members.map((memberID) => {
-      console.log(memberID);
+    console.log(members);
 
+    members.map((memberID) => {
+      console.log("Emmiting to user " + memberID);
       io.to(memberID).emit("new chat", { ..._chat, messages: [] });
     });
 
