@@ -35,3 +35,14 @@ Realtime chatting application in MERN stack using Socket.io library
 	  ```
 5. In sample of .env CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET are dummy values, create a account at https://cloudinary.com/ you will get those values there.
 6. This application is not completed yet. Some minor features are yet to add.
+7. How to run the application?
+	```bash
+	# Open a new terminal at project directory
+	cd backend
+ 	npm run dev
+ 	```
+	```bash
+ 	# Open a new terminal at project directory
+	cd frontend
+ 	npm run dev
+ 	```
