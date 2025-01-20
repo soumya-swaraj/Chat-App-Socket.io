@@ -64,16 +64,12 @@ const chatSlice = createSlice({
         if (chat.messages.length) chatsWithMsg.push(chat);
         else chatsWithNoMsg.push(chat);
       });
-      console.log(chatsWithMsg);
       chatsWithMsg = chatsWithMsg.sort((c1, c2) => {
-        console.log(c2.messages);
-        console.log(c1.messages);
         return (
           new Date(c2.messages[c2.messages.length - 1].createdAt) -
           new Date(c1.messages[c1.messages.length - 1].createdAt)
         );
       });
-      console.log(chatsWithMsg);
       state.chats = [...chatsWithMsg, ...chatsWithNoMsg];
     },
     setSocket(state, action) {
