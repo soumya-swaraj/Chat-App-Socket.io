@@ -2,6 +2,7 @@ import {
   createAsyncThunk,
   createSelector,
   createSlice,
+  current,
 } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -48,12 +49,32 @@ const chatSlice = createSlice({
       state.chats.push(action.payload);
     },
     addMessage(state, action) {
+      if (!state.chats) return;
       const { message, chatID } = action.payload;
       const chat = state.chats.find((_chat) => _chat._id === chatID);
       if (!chat) return;
       chat.messages.push(message);
       if (state.selectedChat?._id === chatID)
         state.selectedChat.messages.push(message);
+    },
+    sortChat(state) {
+      let chatsWithMsg = [];
+      const chatsWithNoMsg = [];
+      current(state.chats).forEach((chat) => {
+        if (chat.messages.length) chatsWithMsg.push(chat);
+        else chatsWithNoMsg.push(chat);
+      });
+      console.log(chatsWithMsg);
+      chatsWithMsg = chatsWithMsg.sort((c1, c2) => {
+        console.log(c2.messages);
+        console.log(c1.messages);
+        return (
+          new Date(c2.messages[c2.messages.length - 1].createdAt) -
+          new Date(c1.messages[c1.messages.length - 1].createdAt)
+        );
+      });
+      console.log(chatsWithMsg);
+      state.chats = [...chatsWithMsg, ...chatsWithNoMsg];
     },
     setSocket(state, action) {
       state.socket = action.payload;
@@ -85,7 +106,7 @@ const chatSlice = createSlice({
   },
 });
 
-const { setSelectedChat, addChat, addMessage, setSocket, reset } =
+const { setSelectedChat, addChat, addMessage, setSocket, reset, sortChat } =
   chatSlice.actions;
 
 const selectChat = (state) => state.chat;
@@ -118,6 +139,7 @@ export {
   addChat,
   addMessage,
   setSocket,
+  sortChat,
   selectChats,
   selectChatLoading,
   selectSelectedChat,

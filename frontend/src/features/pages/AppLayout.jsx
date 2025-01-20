@@ -31,7 +31,6 @@ function HomePage() {
         dispatch(setSocket(socket));
       });
       socket.on("new chat", (chat) => {
-        console.log("NewChat triggered");
         dispatch(addChat(chat));
         socket.emit("join chats", [chat._id]);
       });

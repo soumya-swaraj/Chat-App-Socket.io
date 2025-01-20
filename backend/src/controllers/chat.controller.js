@@ -60,6 +60,13 @@ const getChats = async (req, res) => {
           as: "messages",
         },
       },
+      {
+        $addFields: {
+          latestMessage: { $arrayElemAt: ["$messages", -1] },
+        },
+      },
+      { $sort: { "latestMessage.createdAt": -1 } },
+      { $project: { latestMessage: 0 } },
     ]);
 
     return res.status(200).json({

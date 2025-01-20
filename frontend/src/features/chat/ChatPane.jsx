@@ -8,6 +8,7 @@ import {
   selectChats,
   addMessage,
   selectSocket,
+  sortChat,
 } from "./ChatSlice";
 import Chat from "./Chat";
 import { selectUser } from "../user/userSlice";
@@ -23,11 +24,12 @@ function ChatPane() {
   useEffect(() => {
     if (socket?.connected) {
       socket.on("new message", (message) => {
-        console.log(message);
         if (message.senderID !== user._id) {
-          console.log("I am not sender");
           dispatch(addMessage({ message, chatID: message.chatID }));
         }
+        setTimeout(() => {
+          dispatch(sortChat());
+        }, 50);
       });
     }
   }, [dispatch, socket, user._id]);

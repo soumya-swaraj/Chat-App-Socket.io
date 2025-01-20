@@ -16,7 +16,6 @@ function MessageDraft() {
   async function sendMessage() {
     if ((!image && !text) || !chat._id) return;
     setSending(true);
-    console.log("Sending...");
     const message = await postMessage(chat._id, text, image);
     dispatch(addMessage({ message, chatID: chat._id }));
     setSending(false);
