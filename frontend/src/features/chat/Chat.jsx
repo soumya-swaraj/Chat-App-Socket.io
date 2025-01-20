@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../user/userSlice";
 import { useEffect, useState } from "react";
 import styles from "./Chat.module.css";
-import { setSelectedChat } from "./ChatSlice";
+import { selectSelectedChat, setSelectedChat } from "./ChatSlice";
 
 function Chat({ chat, isUserPaneOpen }) {
   const { isGroupChat, members } = chat;
-  const { _id: myID } = useSelector(selectUser);
   const [chatName, setChatName] = useState();
   const [chatImage, setChatImage] = useState();
   const dispatch = useDispatch();
+  const selectedChat = useSelector(selectSelectedChat);
+  const { _id: myID } = useSelector(selectUser);
 
   useEffect(() => {
     if (isGroupChat) {
@@ -36,6 +37,9 @@ function Chat({ chat, isUserPaneOpen }) {
       fetchUser();
     }
   }, [chat.chatName, chat.image, isGroupChat, members, myID]);
+
+  if (chat.messages.length === 0 && selectedChat?._id !== chat._id) return;
+
   return (
     <div
       className={styles.chatContainer}

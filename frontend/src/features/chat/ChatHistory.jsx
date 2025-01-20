@@ -1,39 +1,14 @@
 import { useEffect, useState } from "react";
 import styles from "./ChatHistory.module.css";
 import MessageContainer from "./MessageContainer";
-import {
-  addMessage,
-  fetchMessages,
-  selectMessageLoading,
-  selectMessages,
-  selectSelectedChat,
-  selectSocket,
-} from "./ChatSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../user/userSlice";
+import { selectMessages, selectSelectedChat } from "./ChatSlice";
+import { useSelector } from "react-redux";
 
 function ChatHistory() {
-  const dispatch = useDispatch();
   const messages = useSelector(selectMessages);
-  const messageLoadingStatus = useSelector(selectMessageLoading);
   const selectedChat = useSelector(selectSelectedChat);
   const [members, setMembers] = useState([]);
   const [membersLoading, setMembersLoading] = useState(true);
-  const socket = useSelector(selectSocket);
-  const user = useSelector(selectUser);
-
-  useEffect(() => {
-    if (socket?.connected) {
-      socket.on("new message", (message) => {
-        if (
-          message.chatID === selectedChat._id &&
-          message.senderID !== user._id
-        ) {
-          dispatch(addMessage(message));
-        }
-      });
-    }
-  }, [dispatch, selectedChat._id, socket, user._id]);
 
   useEffect(() => {
     async function fetchMember() {
@@ -64,18 +39,9 @@ function ChatHistory() {
     }
   }, [selectedChat.members]);
 
-  useEffect(() => {
-    async function loadMessages() {
-      dispatch(fetchMessages());
-    }
-    loadMessages();
-  }, [dispatch, selectedChat]);
-
   return (
     <div className={styles.mainContainer}>
-      {messageLoadingStatus === "idle" ||
-      messageLoadingStatus === "pending" ||
-      membersLoading === true ? (
+      {membersLoading === true ? (
         <p>Loading...</p>
       ) : (
         messages.map((message) => (

@@ -2,11 +2,11 @@ import {
   createAsyncThunk,
   createSelector,
   createSlice,
+  current,
 } from "@reduxjs/toolkit";
 
 const initialState = {
   chats: [],
-  messages: [],
   selectedChat: null,
   chatLoading: "", //'idle' | 'pending' | 'succeeded' | 'failed',
   messageLoading: "", //'idle' | 'pending' | 'succeeded' | 'failed',
@@ -38,32 +38,6 @@ const fetchChats = createAsyncThunk(
   }
 );
 
-const fetchMessages = createAsyncThunk(
-  "message/fetch",
-  async function (_, { rejectWithValue, getState }) {
-    const state = getState();
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_API_URL_V1}message/${
-          state.chat.selectedChat._id
-        }`,
-        {
-          credentials: "include",
-        }
-      );
-      if (!res.ok) {
-        const data = await res.json();
-        return rejectWithValue(data.message);
-      }
-      const data = await res.json();
-      return data.data.messages;
-    } catch (error) {
-      console.log("fetchChats - chatSlice ", error);
-      return rejectWithValue(error);
-    }
-  }
-);
-
 const chatSlice = createSlice({
   name: "chat",
   initialState,
@@ -75,7 +49,28 @@ const chatSlice = createSlice({
       state.chats.push(action.payload);
     },
     addMessage(state, action) {
-      state.messages.push(action.payload);
+      if (!state.chats) return;
+      const { message, chatID } = action.payload;
+      const chat = state.chats.find((_chat) => _chat._id === chatID);
+      if (!chat) return;
+      chat.messages.push(message);
+      if (state.selectedChat?._id === chatID)
+        state.selectedChat.messages.push(message);
+    },
+    sortChat(state) {
+      let chatsWithMsg = [];
+      const chatsWithNoMsg = [];
+      current(state.chats).forEach((chat) => {
+        if (chat.messages.length) chatsWithMsg.push(chat);
+        else chatsWithNoMsg.push(chat);
+      });
+      chatsWithMsg = chatsWithMsg.sort((c1, c2) => {
+        return (
+          new Date(c2.messages[c2.messages.length - 1].createdAt) -
+          new Date(c1.messages[c1.messages.length - 1].createdAt)
+        );
+      });
+      state.chats = [...chatsWithMsg, ...chatsWithNoMsg];
     },
     setSocket(state, action) {
       state.socket = action.payload;
@@ -103,26 +98,17 @@ const chatSlice = createSlice({
       .addCase(fetchChats.rejected, function (state, action) {
         state.chatError = action.payload;
         state.chatLoading = "failed";
-      })
-      .addCase(fetchMessages.fulfilled, function (state, action) {
-        state.messages = action.payload;
-        state.messageLoading = "succeeded";
-      })
-      .addCase(fetchMessages.pending, function (state) {
-        state.messageLoading = "pending";
-      })
-      .addCase(fetchMessages.rejected, function (state, action) {
-        state.messageError = action.payload;
-        state.messageLoading = "failed";
       });
   },
 });
 
-const { setSelectedChat, addChat, addMessage, setSocket, reset } =
+const { setSelectedChat, addChat, addMessage, setSocket, reset, sortChat } =
   chatSlice.actions;
 
 const selectChat = (state) => state.chat;
-const selectChats = createSelector([selectChat], (chat) => chat.chats);
+const selectChats = createSelector([selectChat], (chat) => {
+  return chat.chats;
+});
 const selectChatLoading = createSelector(
   [selectChat],
   (chat) => chat.chatLoading
@@ -131,7 +117,11 @@ const selectSelectedChat = createSelector(
   [selectChat],
   (chat) => chat.selectedChat
 );
-const selectMessages = createSelector([selectChat], (chat) => chat.messages);
+
+const selectMessages = createSelector([selectSelectedChat], (selectedChat) => {
+  if (!selectedChat) return [];
+  return selectedChat.messages;
+});
 const selectMessageLoading = createSelector(
   [selectChat],
   (chat) => chat.messageLoading
@@ -141,11 +131,11 @@ const selectSocket = createSelector([selectChat], (chat) => chat.socket);
 export {
   reset,
   fetchChats,
-  fetchMessages,
   setSelectedChat,
   addChat,
   addMessage,
   setSocket,
+  sortChat,
   selectChats,
   selectChatLoading,
   selectSelectedChat,

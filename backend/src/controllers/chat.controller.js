@@ -1,4 +1,5 @@
 const { Chat } = require("../models/chat.model.js");
+const { io } = require("../socket.js");
 const cloudinary = require("../util/cloudinary.util.js");
 
 const createNewChat = async (req, res) => {
@@ -23,6 +24,15 @@ const createNewChat = async (req, res) => {
       members,
       isGroupChat,
     }).save();
+    const _chat = chat.toObject();
+
+    console.log(members);
+
+    members.map((memberID) => {
+      console.log("Emmiting to user " + memberID);
+      io.to(memberID).emit("new chat", { ..._chat, messages: [] });
+    });
+
     return res.status(201).json({
       status: "success",
       data: { chat },
@@ -39,7 +49,26 @@ const getChats = async (req, res) => {
   try {
     const { _id: userID } = req.user;
 
-    const chats = await Chat.find({ members: { $in: [userID] } });
+    // const chats = await Chat.find({ members: { $in: [userID] } });
+    const chats = await Chat.aggregate([
+      { $match: { members: { $in: [userID] } } },
+      {
+        $lookup: {
+          from: "messages",
+          localField: "_id",
+          foreignField: "chatID",
+          as: "messages",
+        },
+      },
+      {
+        $addFields: {
+          latestMessage: { $arrayElemAt: ["$messages", -1] },
+        },
+      },
+      { $sort: { "latestMessage.createdAt": -1 } },
+      { $project: { latestMessage: 0 } },
+    ]);
+
     return res.status(200).json({
       status: "success",
       data: { chats },
@@ -66,6 +95,7 @@ const checkPvtChatByMembers = async (req, res) => {
       isGroupChat: false,
       members: { $size: 2, $all: members },
     });
+
     return res.status(200).json({
       status: "success",
       data: { chat },
